@@ -1,11 +1,6 @@
-############################
-## instructions for reproducing
-## anlaytical KD and JHUGen 
-## numerical KD distributions
-## and ROC curves.
-############################
-
-UPDATE:
+##
+## Instructions for running this package
+##
 
 1) Check out packeages ( a combination of hzgammaME and a cvs higgs mass/width )
 
