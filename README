@@ -1,0 +1,61 @@
+############################
+## instructions for reproducing
+## anlaytical KD and JHUGen 
+## numerical KD distributions
+## and ROC curves.
+############################
+
+UPDATE:
+
+1) Check out packeages ( a combination of hzgammaME and a cvs higgs mass/width )
+
+cmsrel CMSSW_5_2_5
+cd CMSSW_5_2_5/src/
+cmsenv
+git clone https://github.com/andreypz/hzgammaME.git
+cvs co -d Higgs/Higgs_CS_and_Width UserCode/Snowball/Higgs/Higgs_CS_and_Width
+cp -r Higgs/Higgs_CS_and_Width/txtFiles .
+cd hzgammaME/
+cp /afs/cern.ch/user/y/yygao/public/libmcfm_6p6.so .
+make
+
+NOTE, when changing the ME input files, such as the includeVars.F90, you need 
+to remake the library, by doing the following. 
+
+make clean   # absolutely needed
+make
+
+Instructions on getting a MCFM library is at the end of this file. 
+
+2) Compile code and run macro:
+
+cp /afs/cern.ch/user/y/yygao/public/SMHiggs_comb_withDiscriminants.root .
+root -l -n 
+.L runME_HZZ4l_JHUgenSamples.C+
+runME_HZZ4l_JHUgenSamples("./","SMHiggs_comb_withDiscriminants.root","./",1,2)
+
+The output should be:
+ 
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+Process ZZ_2e2m TEvtProb::XsecCalc(): dXsec=2.37018e-07 Msq=2.37018e-07 flux=0.383223
+Process HZZ_4l TEvtProb::XsecCalc(): dXsec=2.97374e-06 Msq=2.97374e-06 flux=0.383223
+
+3) Instruction on compiling the MCFM library for MCFM 6.6
+
+1. Download MCFM and prepare the install makefile
+
+wget http://mcfm.fnal.gov/mcfm-6.6.tar.gz
+tar -xf MCFM-6.6.tar.gz
+cd MCFM-6.6/
+./Install
+
+2. Modify the following two lines in makefile to allow shared library to be read out
+
+FFLAGS 	= -fno-automatic -fno-f2c -O0 -fPIC -g -I$(INCPATH) -I$(TENSORREDDIR)/Include -Iobj
+F90FLAGS = -fno-automatic -fno-f2c -O2 -fPIC -g -I$(INCPATH) -Iobj -Jobj
+
+3. compile the package and export the libarry
+
+make
+cd obj
+g++ -Wl,-soname,libmcfm_6p6.so -shared -o libmcfm_6p6.so *.o  
