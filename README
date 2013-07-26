@@ -25,7 +25,7 @@ Instructions on getting a MCFM library is at the end of this file.
 2) Compile code and run macro:
 
 cp /afs/cern.ch/user/y/yygao/public/SMHiggs_comb_withDiscriminants.root .
-root -l -n 
+root -l -b 
 .L runME_HZZ4l_JHUgenSamples.C+
 runME_HZZ4l_JHUgenSamples("./","SMHiggs_comb_withDiscriminants.root","./",1,2)
 
